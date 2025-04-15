@@ -63,12 +63,37 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Custom colors for our agriculture app
+				// Enhanced agriculture color palette with better contrast
 				"agro-primary": "#3a7e4f",
+				"agro-primary-dark": "#2e6740",
 				"agro-secondary": "#8bc34a",
 				"agro-accent": "#f9a826",
+				"agro-accent-dark": "#e69718",
 				"agro-light": "#f5f7fa",
 				"agro-dark": "#2d3748",
+				"agro-text": "#333333",
+				"agro-text-light": "#6c757d",
+				"agro-border": "#d1d5db",
+				"agro-background": "#ffffff",
+				// Dashboard specific colors
+				"dashboard-plantio": "#3a7e4f",  // Verde
+				"dashboard-pulverizacao-terrestre": "#0ea5e9",  // Azul
+				"dashboard-pulverizacao-aerea": "#f9a826",  // Amarelo
+				"dashboard-colheita": "#f97316",  // Laranja
+				"dashboard-text": "#2d3748",
+				"dashboard-background": "#f5f7fa",
+				"dashboard-card": "#ffffff",
+				"dashboard-border": "#e2e8f0",
+				"dashboard-hover": "#f1f5f9",
+				"dashboard-accent": "#d946ef",
+				"dashboard-error": "#ea384c",
+				"dashboard-success": "#10b981",
+				"dashboard-warning": "#f59e0b",
+				"dashboard-info": "#0ea5e9",
+				// Financial section
+				"financial-income": "#10b981",
+				"financial-expense": "#ea384c",
+				"financial-neutral": "#6c757d",
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
