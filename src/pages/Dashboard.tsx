@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Tractor, 
@@ -19,138 +18,71 @@ import {
   CloudRain
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Sidebar from '../components/Sidebar';
+import FarmMap from '../components/FarmMap';
+import ImportDataModal from '../components/ImportDataModal';
 
 const Dashboard: React.FC = () => {
   const [activeModule, setActiveModule] = useState('overview');
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+
+  const openImportModal = () => {
+    setIsImportModalOpen(true);
+  };
+
+  const closeImportModal = () => {
+    setIsImportModalOpen(false);
+  };
 
   return (
-    <div className="min-h-screen bg-[#f5f7fa]">
-      {/* Header */}
-      <header className="bg-agro-primary p-4 shadow-md">
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-white text-2xl font-bold">Sistema Agrícola Inteligente</h1>
-          <div className="flex items-center space-x-2">
-            <span className="text-white">Olá, Produtor</span>
-            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-agro-primary">
-              <span>P</span>
+    <div className="min-h-screen bg-[#f5f7fa] flex">
+      {/* Sidebar */}
+      <Sidebar activeModule={activeModule} setActiveModule={setActiveModule} />
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <header className="bg-agro-primary p-4 shadow-md">
+          <div className="container mx-auto flex justify-between items-center">
+            <h1 className="text-white text-2xl font-bold">Sistema Agrícola Inteligente</h1>
+            <div className="flex items-center space-x-2">
+              <span className="text-white">Olá, Produtor</span>
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-agro-primary">
+                <span>P</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Content Area */}
+        <div className="flex-1 overflow-auto p-6">
+          <div className="grid grid-cols-1 gap-6">
+            {/* Welcome Area with Map */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h2 className="text-xl font-semibold text-agro-dark mb-4">🌾 Bem-vindo, produtor! Vamos cuidar da sua fazenda juntos?</h2>
+              
+              <div className="h-64 mb-6">
+                <FarmMap />
+              </div>
+
+              {/* Conditional Module Content */}
+              {activeModule === 'overview' && <OverviewModule />}
+              {activeModule === 'financial' && <FinancialModule />}
+              {activeModule === 'planning' && <PlanningModule />}
+              {activeModule === 'weather' && <WeatherModule />}
+              {activeModule === 'market' && <MarketModule />}
+              {activeModule === 'machines' && <MachinesModule />}
+              {activeModule === 'map' && <MapModule />}
+              {activeModule === 'monitoring' && <MonitoringModule openImportModal={openImportModal} />}
+              {activeModule === 'assistance' && <AssistanceModule />}
+              {activeModule === 'settings' && <SettingsModule />}
             </div>
           </div>
         </div>
-      </header>
-
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-6">
-        <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-          <h2 className="text-xl font-semibold text-agro-dark mb-4">🌾 Bem-vindo, produtor! Vamos cuidar da sua fazenda juntos?</h2>
-          
-          {/* Module Navigation */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-6">
-            <ModuleCard 
-              title="Visão Geral" 
-              icon={<BarChart3 className="text-agro-primary" />} 
-              isActive={activeModule === 'overview'}
-              onClick={() => setActiveModule('overview')}
-            />
-            <ModuleCard 
-              title="Gestão Financeira" 
-              icon={<LineChart className="text-financial-income" />} 
-              isActive={activeModule === 'financial'}
-              onClick={() => setActiveModule('financial')}
-            />
-            <ModuleCard 
-              title="Planejamento" 
-              icon={<Calendar className="text-dashboard-pulverizacao-aerea" />} 
-              isActive={activeModule === 'planning'}
-              onClick={() => setActiveModule('planning')}
-            />
-            <ModuleCard 
-              title="Clima & Solo" 
-              icon={<CloudRain className="text-dashboard-pulverizacao-terrestre" />} 
-              isActive={activeModule === 'weather'}
-              onClick={() => setActiveModule('weather')}
-            />
-            <ModuleCard 
-              title="Comercialização" 
-              icon={<LineChart className="text-dashboard-accent" />} 
-              isActive={activeModule === 'market'}
-              onClick={() => setActiveModule('market')}
-            />
-            <ModuleCard 
-              title="Máquinas" 
-              icon={<Tractor className="text-dashboard-pulverizacao-terrestre" />} 
-              isActive={activeModule === 'machines'}
-              onClick={() => setActiveModule('machines')}
-            />
-            <ModuleCard 
-              title="Talhões no Mapa" 
-              icon={<MapPin className="text-dashboard-error" />} 
-              isActive={activeModule === 'map'}
-              onClick={() => setActiveModule('map')}
-            />
-            <ModuleCard 
-              title="Monitoramento" 
-              icon={<ClipboardList className="text-dashboard-colheita" />} 
-              isActive={activeModule === 'monitoring'}
-              onClick={() => setActiveModule('monitoring')}
-            />
-            <ModuleCard 
-              title="Assistência" 
-              icon={<MessageSquare className="text-dashboard-info" />} 
-              isActive={activeModule === 'assistance'}
-              onClick={() => setActiveModule('assistance')}
-            />
-            <ModuleCard 
-              title="Configurações" 
-              icon={<Settings className="text-agro-text-light" />} 
-              isActive={activeModule === 'settings'}
-              onClick={() => setActiveModule('settings')}
-            />
-          </div>
-        </div>
-
-        {/* Conditional Module Content */}
-        {activeModule === 'overview' && <OverviewModule />}
-        {activeModule === 'financial' && <FinancialModule />}
-        {activeModule === 'planning' && <PlanningModule />}
-        {activeModule === 'weather' && <WeatherModule />}
-        {activeModule === 'market' && <MarketModule />}
-        {activeModule === 'machines' && <MachinesModule />}
-        {activeModule === 'map' && <MapModule />}
-        {activeModule === 'monitoring' && <MonitoringModule />}
-        {activeModule === 'assistance' && <AssistanceModule />}
-        {activeModule === 'settings' && <SettingsModule />}
       </div>
 
-      {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
-        <div className="grid grid-cols-5 h-16">
-          <NavButton 
-            icon={<BarChart3 />} 
-            isActive={activeModule === 'overview'} 
-            onClick={() => setActiveModule('overview')}
-          />
-          <NavButton 
-            icon={<Tractor />} 
-            isActive={activeModule === 'machines'} 
-            onClick={() => setActiveModule('machines')}
-          />
-          <NavButton 
-            icon={<MapPin />} 
-            isActive={activeModule === 'map'} 
-            onClick={() => setActiveModule('map')}
-          />
-          <NavButton 
-            icon={<CloudRain />} 
-            isActive={activeModule === 'weather'} 
-            onClick={() => setActiveModule('weather')}
-          />
-          <NavButton 
-            icon={<MessageSquare />} 
-            isActive={activeModule === 'assistance'} 
-            onClick={() => setActiveModule('assistance')}
-          />
-        </div>
-      </nav>
+      {/* Import Data Modal */}
+      <ImportDataModal isOpen={isImportModalOpen} onClose={closeImportModal} />
     </div>
   );
 };
@@ -878,7 +810,7 @@ const MapModule = () => {
 };
 
 // Monitoring Module
-const MonitoringModule = () => {
+const MonitoringModule = ({ openImportModal }: { openImportModal: () => void }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-xl font-semibold text-[#3a7e4f] mb-4">Monitoramento de Campo</h2>
@@ -926,6 +858,12 @@ const MonitoringModule = () => {
         
         <div className="mt-4 flex justify-center space-x-4">
           <button className="bg-agro-primary text-white px-4 py-2 rounded-md">Registrar Nova Ocorrência</button>
+          <button 
+            onClick={openImportModal}
+            className="bg-blue-600 text-white px-4 py-2 rounded-md flex items-center">
+            <Cloud className="mr-2" size={18} />
+            Importar Dados
+          </button>
           <button className="bg-gray-200 text-agro-dark px-4 py-2 rounded-md">Ver Histórico Completo</button>
         </div>
       </div>
