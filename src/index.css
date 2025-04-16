@@ -11,65 +11,67 @@
   }
 }
 
-/* Dashboard specific styles */
-.dashboard-card {
-  @apply bg-dashboard-card border border-dashboard-border rounded-lg shadow-sm p-4;
-}
+@layer components {
+  /* Dashboard specific styles */
+  .dashboard-card {
+    @apply bg-dashboard-card border border-dashboard-border rounded-lg shadow-sm p-4;
+  }
 
-.dashboard-button {
-  @apply bg-agro-primary text-white px-4 py-2 rounded-md hover:bg-agro-primary-dark transition-colors;
-}
+  .dashboard-button {
+    @apply bg-agro-primary text-white px-4 py-2 rounded-md hover:bg-agro-primary-dark transition-colors;
+  }
 
-.dashboard-button-secondary {
-  @apply bg-agro-secondary text-agro-dark px-4 py-2 rounded-md hover:opacity-90 transition-colors;
-}
+  .dashboard-button-secondary {
+    @apply bg-agro-secondary text-agro-dark px-4 py-2 rounded-md hover:opacity-90 transition-colors;
+  }
 
-.dashboard-button-accent {
-  @apply bg-agro-accent text-white px-4 py-2 rounded-md hover:bg-agro-accent-dark transition-colors;
-}
+  .dashboard-button-accent {
+    @apply bg-agro-accent text-white px-4 py-2 rounded-md hover:bg-agro-accent-dark transition-colors;
+  }
 
-.section-header {
-  @apply text-xl font-semibold text-agro-dark mb-4;
-}
+  .section-header {
+    @apply text-xl font-semibold text-agro-dark mb-4;
+  }
 
-.text-field {
-  @apply border border-agro-border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-agro-primary;
-}
+  .text-field {
+    @apply border border-agro-border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-agro-primary;
+  }
 
-.tab-active {
-  @apply border-b-2 border-agro-accent text-agro-dark;
-}
+  .tab-active {
+    @apply border-b-2 border-agro-accent text-agro-dark;
+  }
 
-.tab-inactive {
-  @apply text-agro-text-light hover:text-agro-dark;
-}
+  .tab-inactive {
+    @apply text-agro-text-light hover:text-agro-dark;
+  }
 
-/* Farm fields color coding */
-.field-plantio {
-  @apply bg-dashboard-plantio text-white;
-}
+  /* Farm fields color coding */
+  .field-plantio {
+    @apply bg-dashboard-plantio text-white;
+  }
 
-.field-pulverizacao-terrestre {
-  @apply bg-dashboard-pulverizacao-terrestre text-white;
-}
+  .field-pulverizacao-terrestre {
+    @apply bg-dashboard-pulverizacao-terrestre text-white;
+  }
 
-.field-pulverizacao-aerea {
-  @apply bg-dashboard-pulverizacao-aerea text-agro-dark;
-}
+  .field-pulverizacao-aerea {
+    @apply bg-dashboard-pulverizacao-aerea text-agro-dark;
+  }
 
-.field-colheita {
-  @apply bg-dashboard-colheita text-white;
-}
+  .field-colheita {
+    @apply bg-dashboard-colheita text-white;
+  }
 
-/* Financial indicators */
-.financial-positive {
-  @apply text-financial-income;
-}
+  /* Financial indicators */
+  .financial-positive {
+    @apply text-financial-income;
+  }
 
-.financial-negative {
-  @apply text-financial-expense;
-}
+  .financial-negative {
+    @apply text-financial-expense;
+  }
 
-.financial-neutral {
-  @apply text-financial-neutral;
+  .financial-neutral {
+    @apply text-financial-neutral;
+  }
 }

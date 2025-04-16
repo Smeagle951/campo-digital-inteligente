@@ -22,6 +22,8 @@ const config: Config = {
         "dashboard-info": "#4299E1",
         "financial-income": "#38A169",
         "financial-expense": "#E53E3E",
+        "dashboard-card": "#F1F0FB",
+        "dashboard-border": "#8E9196",
         border: "hsl(var(--border) / <alpha-value>)",
         background: "hsl(var(--background) / <alpha-value>)",
         foreground: "hsl(var(--foreground) / <alpha-value>)",
