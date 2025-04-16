@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   Tractor, 
@@ -15,12 +16,15 @@ import {
   MessageSquare,
   Users,
   ClipboardList,
-  CloudRain
+  CloudRain,
+  Upload,
+  Bluetooth
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import FarmMap from '../components/FarmMap';
 import ImportDataModal from '../components/ImportDataModal';
+import { toast } from 'sonner';
 
 const Dashboard: React.FC = () => {
   const [activeModule, setActiveModule] = useState('overview');
@@ -32,6 +36,10 @@ const Dashboard: React.FC = () => {
 
   const closeImportModal = () => {
     setIsImportModalOpen(false);
+  };
+
+  const handleNotImplemented = () => {
+    toast.info("Esta funcionalidade será implementada em breve!");
   };
 
   return (
@@ -66,16 +74,16 @@ const Dashboard: React.FC = () => {
               </div>
 
               {/* Conditional Module Content */}
-              {activeModule === 'overview' && <OverviewModule />}
-              {activeModule === 'financial' && <FinancialModule />}
-              {activeModule === 'planning' && <PlanningModule />}
-              {activeModule === 'weather' && <WeatherModule />}
-              {activeModule === 'market' && <MarketModule />}
-              {activeModule === 'machines' && <MachinesModule />}
-              {activeModule === 'map' && <MapModule />}
-              {activeModule === 'monitoring' && <MonitoringModule openImportModal={openImportModal} />}
-              {activeModule === 'assistance' && <AssistanceModule />}
-              {activeModule === 'settings' && <SettingsModule />}
+              {activeModule === 'overview' && <OverviewModule handleNotImplemented={handleNotImplemented} />}
+              {activeModule === 'financial' && <FinancialModule handleNotImplemented={handleNotImplemented} />}
+              {activeModule === 'planning' && <PlanningModule handleNotImplemented={handleNotImplemented} />}
+              {activeModule === 'weather' && <WeatherModule handleNotImplemented={handleNotImplemented} />}
+              {activeModule === 'market' && <MarketModule handleNotImplemented={handleNotImplemented} />}
+              {activeModule === 'machines' && <MachinesModule handleNotImplemented={handleNotImplemented} />}
+              {activeModule === 'map' && <MapModule handleNotImplemented={handleNotImplemented} />}
+              {activeModule === 'monitoring' && <MonitoringModule openImportModal={openImportModal} handleNotImplemented={handleNotImplemented} />}
+              {activeModule === 'assistance' && <AssistanceModule handleNotImplemented={handleNotImplemented} />}
+              {activeModule === 'settings' && <SettingsModule handleNotImplemented={handleNotImplemented} />}
             </div>
           </div>
         </div>
@@ -132,7 +140,7 @@ const NavButton = ({ icon, isActive, onClick }: {
 };
 
 // Dashboard Modules
-const OverviewModule = () => {
+const OverviewModule = ({ handleNotImplemented }: { handleNotImplemented: () => void }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {/* Trabalhos de Campo */}
@@ -144,28 +152,48 @@ const OverviewModule = () => {
               <Sprout className="mr-3 text-dashboard-plantio" />
               <span>Plantio Soja</span>
             </div>
-            <span className="text-sm text-agro-text-light">Em andamento</span>
+            <button 
+              onClick={handleNotImplemented}
+              className="text-sm text-agro-text-light hover:text-agro-primary"
+            >
+              Ver detalhes
+            </button>
           </div>
           <div className="flex items-center justify-between p-3 bg-blue-50 rounded-md">
             <div className="flex items-center">
               <Tractor className="mr-3 text-dashboard-pulverizacao-terrestre" />
               <span>Pulverização Terrestre</span>
             </div>
-            <span className="text-sm text-agro-text-light">Agendado</span>
+            <button 
+              onClick={handleNotImplemented}
+              className="text-sm text-agro-text-light hover:text-agro-primary"
+            >
+              Ver detalhes
+            </button>
           </div>
           <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-md">
             <div className="flex items-center">
               <PlaneTakeoff className="mr-3 text-dashboard-pulverizacao-aerea" />
               <span>Pulverização Aérea</span>
             </div>
-            <span className="text-sm text-agro-text-light">Pendente</span>
+            <button 
+              onClick={handleNotImplemented}
+              className="text-sm text-agro-text-light hover:text-agro-primary"
+            >
+              Ver detalhes
+            </button>
           </div>
           <div className="flex items-center justify-between p-3 bg-orange-50 rounded-md">
             <div className="flex items-center">
               <Wheat className="mr-3 text-dashboard-colheita" />
               <span>Colheita Milho</span>
             </div>
-            <span className="text-sm text-agro-text-light">Planejado</span>
+            <button 
+              onClick={handleNotImplemented}
+              className="text-sm text-agro-text-light hover:text-agro-primary"
+            >
+              Ver detalhes
+            </button>
           </div>
         </div>
       </div>
@@ -186,6 +214,12 @@ const OverviewModule = () => {
                 <span className="ml-2">Vegetativo</span>
               </div>
             </div>
+            <button 
+              onClick={handleNotImplemented}
+              className="mt-2 text-sm text-agro-primary hover:underline"
+            >
+              Ver detalhes
+            </button>
           </div>
           <div className="p-4 border rounded-md">
             <h3 className="font-medium mb-2">Talhão 2 - Milho</h3>
@@ -199,6 +233,12 @@ const OverviewModule = () => {
                 <span className="ml-2">Colheita</span>
               </div>
             </div>
+            <button 
+              onClick={handleNotImplemented}
+              className="mt-2 text-sm text-agro-primary hover:underline"
+            >
+              Ver detalhes
+            </button>
           </div>
         </div>
       </div>
@@ -235,6 +275,12 @@ const OverviewModule = () => {
               </div>
             </div>
           </div>
+          <button 
+            onClick={handleNotImplemented}
+            className="w-full mt-2 text-sm text-agro-primary hover:underline"
+          >
+            Ver previsão completa
+          </button>
         </div>
       </div>
 
@@ -266,6 +312,12 @@ const OverviewModule = () => {
               <span>R$ 198,30/arroba</span>
             </div>
           </div>
+          <button 
+            onClick={handleNotImplemented}
+            className="w-full mt-2 text-sm text-agro-primary hover:underline"
+          >
+            Ver todos os preços
+          </button>
         </div>
       </div>
 
@@ -275,12 +327,30 @@ const OverviewModule = () => {
         <div className="space-y-3">
           <div className="p-3 bg-red-50 text-red-700 rounded-md">
             <p className="text-sm">Alerta de pragas no Talhão 1 - Verificar urgente</p>
+            <button 
+              onClick={handleNotImplemented}
+              className="mt-1 text-xs text-red-600 hover:underline"
+            >
+              Ver detalhes
+            </button>
           </div>
           <div className="p-3 bg-yellow-50 text-yellow-700 rounded-md">
             <p className="text-sm">Previsão de chuva forte - Planejar atividades</p>
+            <button 
+              onClick={handleNotImplemented}
+              className="mt-1 text-xs text-yellow-600 hover:underline"
+            >
+              Ver detalhes
+            </button>
           </div>
           <div className="p-3 bg-green-50 text-green-700 rounded-md">
             <p className="text-sm">Momento ideal para aplicação de fertilizantes</p>
+            <button 
+              onClick={handleNotImplemented}
+              className="mt-1 text-xs text-green-600 hover:underline"
+            >
+              Ver detalhes
+            </button>
           </div>
         </div>
       </div>
@@ -294,18 +364,36 @@ const OverviewModule = () => {
               <p className="font-medium">Manutenção de Equipamentos</p>
               <p className="text-sm text-agro-text-light">Segunda-feira, 8:00</p>
             </div>
+            <button 
+              onClick={handleNotImplemented}
+              className="text-sm text-agro-primary hover:underline"
+            >
+              Detalhes
+            </button>
           </div>
           <div className="flex items-center justify-between p-3 border-b">
             <div>
               <p className="font-medium">Reunião com Agrônomo</p>
               <p className="text-sm text-agro-text-light">Terça-feira, 14:00</p>
             </div>
+            <button 
+              onClick={handleNotImplemented}
+              className="text-sm text-agro-primary hover:underline"
+            >
+              Detalhes
+            </button>
           </div>
           <div className="flex items-center justify-between p-3">
             <div>
               <p className="font-medium">Entrega de Insumos</p>
               <p className="text-sm text-agro-text-light">Quarta-feira, 10:00</p>
             </div>
+            <button 
+              onClick={handleNotImplemented}
+              className="text-sm text-agro-primary hover:underline"
+            >
+              Detalhes
+            </button>
           </div>
         </div>
       </div>
@@ -314,7 +402,7 @@ const OverviewModule = () => {
 };
 
 // Financial Module
-const FinancialModule = () => {
+const FinancialModule = ({ handleNotImplemented }: { handleNotImplemented: () => void }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-xl font-semibold text-[#3a7e4f] mb-4">Gestão Financeira</h2>
@@ -360,9 +448,24 @@ const FinancialModule = () => {
           </div>
         </div>
         <div className="mt-6 flex justify-center space-x-4">
-          <button className="bg-agro-primary text-white px-4 py-2 rounded-md">Adicionar Receita</button>
-          <button className="bg-dashboard-error text-white px-4 py-2 rounded-md">Adicionar Despesa</button>
-          <button className="bg-gray-200 text-agro-dark px-4 py-2 rounded-md">Exportar Relatório</button>
+          <button 
+            onClick={handleNotImplemented}
+            className="bg-agro-primary text-white px-4 py-2 rounded-md hover:bg-agro-dark transition-colors"
+          >
+            Adicionar Receita
+          </button>
+          <button 
+            onClick={handleNotImplemented}
+            className="bg-dashboard-error text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
+          >
+            Adicionar Despesa
+          </button>
+          <button 
+            onClick={handleNotImplemented}
+            className="bg-gray-200 text-agro-dark px-4 py-2 rounded-md hover:bg-gray-300 transition-colors"
+          >
+            Exportar Relatório
+          </button>
         </div>
       </div>
     </div>
@@ -370,7 +473,7 @@ const FinancialModule = () => {
 };
 
 // Planning Module
-const PlanningModule = () => {
+const PlanningModule = ({ handleNotImplemented }: { handleNotImplemented: () => void }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-xl font-semibold text-[#3a7e4f] mb-4">Planejamento de Safras</h2>
@@ -434,13 +537,19 @@ const PlanningModule = () => {
             <p className="text-xs text-right text-agro-text-light">62 sc/ha atuais (85% da meta)</p>
           </div>
         </div>
+        <button 
+          onClick={handleNotImplemented}
+          className="mt-4 w-full bg-agro-primary text-white py-2 rounded-md hover:bg-agro-dark transition-colors"
+        >
+          Adicionar Nova Safra
+        </button>
       </div>
     </div>
   );
 };
 
 // Weather Module
-const WeatherModule = () => {
+const WeatherModule = ({ handleNotImplemented }: { handleNotImplemented: () => void }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="bg-white p-6 rounded-lg shadow-md">
@@ -491,6 +600,12 @@ const WeatherModule = () => {
               <p className="text-xs text-blue-500">75%</p>
             </div>
           </div>
+          <button 
+            onClick={handleNotImplemented}
+            className="mt-4 w-full bg-agro-primary text-white py-2 rounded-md hover:bg-agro-dark transition-colors"
+          >
+            Ver previsão de 15 dias
+          </button>
         </div>
       </div>
       
@@ -538,7 +653,10 @@ const WeatherModule = () => {
             </div>
           </div>
           
-          <button className="w-full bg-agro-primary text-white py-2 rounded-md mt-4">
+          <button 
+            onClick={handleNotImplemented}
+            className="w-full bg-agro-primary text-white py-2 rounded-md hover:bg-agro-dark transition-colors"
+          >
             Registrar Nova Medição
           </button>
         </div>
@@ -548,7 +666,7 @@ const WeatherModule = () => {
 };
 
 // Market Module
-const MarketModule = () => {
+const MarketModule = ({ handleNotImplemented }: { handleNotImplemented: () => void }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-xl font-semibold text-[#3a7e4f] mb-4">Comercialização e Mercado</h2>
@@ -617,6 +735,12 @@ const MarketModule = () => {
                   <span className="ml-1">Fev/2026</span>
                 </div>
               </div>
+              <button 
+                onClick={handleNotImplemented}
+                className="mt-2 text-sm text-agro-primary hover:underline"
+              >
+                Ver detalhes
+              </button>
             </div>
             <div className="p-4">
               <div className="flex justify-between mb-2">
@@ -637,13 +761,29 @@ const MarketModule = () => {
                   <span className="ml-1">Mar/2026</span>
                 </div>
               </div>
+              <button 
+                onClick={handleNotImplemented}
+                className="mt-2 text-sm text-agro-primary hover:underline"
+              >
+                Ver detalhes
+              </button>
             </div>
           </div>
         </div>
         
         <div className="mt-4 flex justify-center space-x-4">
-          <button className="bg-agro-primary text-white px-4 py-2 rounded-md">Novo Contrato</button>
-          <button className="bg-gray-200 text-agro-dark px-4 py-2 rounded-md">Buscar Compradores</button>
+          <button 
+            onClick={handleNotImplemented}
+            className="bg-agro-primary text-white px-4 py-2 rounded-md hover:bg-agro-dark transition-colors"
+          >
+            Novo Contrato
+          </button>
+          <button 
+            onClick={handleNotImplemented}
+            className="bg-gray-200 text-agro-dark px-4 py-2 rounded-md hover:bg-gray-300 transition-colors"
+          >
+            Buscar Compradores
+          </button>
         </div>
       </div>
     </div>
@@ -651,7 +791,7 @@ const MarketModule = () => {
 };
 
 // Machines Module
-const MachinesModule = () => {
+const MachinesModule = ({ handleNotImplemented }: { handleNotImplemented: () => void }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-xl font-semibold text-[#3a7e4f] mb-4">Gestão de Máquinas</h2>
@@ -676,7 +816,12 @@ const MachinesModule = () => {
                   <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Operacional</span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  <button className="text-blue-500 hover:underline">Detalhes</button>
+                  <button 
+                    onClick={handleNotImplemented}
+                    className="text-blue-500 hover:underline"
+                  >
+                    Detalhes
+                  </button>
                 </td>
               </tr>
               <tr>
@@ -687,7 +832,12 @@ const MachinesModule = () => {
                   <span className="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800">Manutenção Pendente</span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  <button className="text-blue-500 hover:underline">Detalhes</button>
+                  <button 
+                    onClick={handleNotImplemented}
+                    className="text-blue-500 hover:underline"
+                  >
+                    Detalhes
+                  </button>
                 </td>
               </tr>
               <tr>
@@ -698,7 +848,12 @@ const MachinesModule = () => {
                   <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">Em Manutenção</span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  <button className="text-blue-500 hover:underline">Detalhes</button>
+                  <button 
+                    onClick={handleNotImplemented}
+                    className="text-blue-500 hover:underline"
+                  >
+                    Detalhes
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -726,8 +881,18 @@ const MachinesModule = () => {
         </div>
         
         <div className="mt-4 flex justify-center space-x-4">
-          <button className="bg-agro-primary text-white px-4 py-2 rounded-md">Adicionar Máquina</button>
-          <button className="bg-dashboard-warning text-white px-4 py-2 rounded-md">Agendar Manutenção</button>
+          <button 
+            onClick={handleNotImplemented}
+            className="bg-agro-primary text-white px-4 py-2 rounded-md hover:bg-agro-dark transition-colors"
+          >
+            Adicionar Máquina
+          </button>
+          <button 
+            onClick={handleNotImplemented}
+            className="bg-dashboard-warning text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors"
+          >
+            Agendar Manutenção
+          </button>
         </div>
       </div>
     </div>
@@ -735,7 +900,7 @@ const MachinesModule = () => {
 };
 
 // Map Module
-const MapModule = () => {
+const MapModule = ({ handleNotImplemented }: { handleNotImplemented: () => void }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-xl font-semibold text-[#3a7e4f] mb-4">Talhões no Mapa</h2>
@@ -771,6 +936,12 @@ const MapModule = () => {
                   <span className="ml-1">2024/2025</span>
                 </div>
               </div>
+              <button 
+                onClick={handleNotImplemented}
+                className="mt-2 text-sm text-agro-primary hover:underline"
+              >
+                Ver mais detalhes
+              </button>
             </div>
             
             <div className="p-4 border rounded-md bg-yellow-50">
@@ -796,13 +967,29 @@ const MapModule = () => {
                   <span className="ml-1">2024/2025</span>
                 </div>
               </div>
+              <button 
+                onClick={handleNotImplemented}
+                className="mt-2 text-sm text-agro-primary hover:underline"
+              >
+                Ver mais detalhes
+              </button>
             </div>
           </div>
         </div>
         
         <div className="mt-4 flex justify-center space-x-4">
-          <button className="bg-agro-primary text-white px-4 py-2 rounded-md">Adicionar Talhão</button>
-          <button className="bg-gray-200 text-agro-dark px-4 py-2 rounded-md">Editar Limites</button>
+          <button 
+            onClick={handleNotImplemented}
+            className="bg-agro-primary text-white px-4 py-2 rounded-md hover:bg-agro-dark transition-colors"
+          >
+            Adicionar Talhão
+          </button>
+          <button 
+            onClick={handleNotImplemented}
+            className="bg-gray-200 text-agro-dark px-4 py-2 rounded-md hover:bg-gray-300 transition-colors"
+          >
+            Editar Limites
+          </button>
         </div>
       </div>
     </div>
@@ -810,7 +997,7 @@ const MapModule = () => {
 };
 
 // Monitoring Module
-const MonitoringModule = ({ openImportModal }: { openImportModal: () => void }) => {
+const MonitoringModule = ({ openImportModal, handleNotImplemented }: { openImportModal: () => void, handleNotImplemented: () => void }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-xl font-semibold text-[#3a7e4f] mb-4">Monitoramento de Campo</h2>
@@ -826,7 +1013,12 @@ const MonitoringModule = ({ openImportModal }: { openImportModal: () => void }) 
               <p className="text-sm mb-2">Talhão 1 - Soja</p>
               <p className="text-sm mb-2">Alta infestação de percevejos no lado leste do talhão. Necessária intervenção imediata.</p>
               <div className="flex justify-end">
-                <button className="text-sm bg-red-100 text-red-700 px-2 py-1 rounded">Ver Detalhes</button>
+                <button 
+                  onClick={handleNotImplemented}
+                  className="text-sm bg-red-100 text-red-700 px-2 py-1 rounded hover:bg-red-200"
+                >
+                  Ver Detalhes
+                </button>
               </div>
             </div>
             
@@ -838,7 +1030,12 @@ const MonitoringModule = ({ openImportModal }: { openImportModal: () => void }) 
               <p className="text-sm mb-2">Talhão 1 - Soja</p>
               <p className="text-sm mb-2">Primeiros sinais de ferrugem asiática detectados. Recomendação de aplicação preventiva.</p>
               <div className="flex justify-end">
-                <button className="text-sm bg-yellow-100 text-yellow-700 px-2 py-1 rounded">Ver Detalhes</button>
+                <button 
+                  onClick={handleNotImplemented}
+                  className="text-sm bg-yellow-100 text-yellow-700 px-2 py-1 rounded hover:bg-yellow-200"
+                >
+                  Ver Detalhes
+                </button>
               </div>
             </div>
             
@@ -850,21 +1047,46 @@ const MonitoringModule = ({ openImportModal }: { openImportModal: () => void }) 
               <p className="text-sm mb-2">Talhão 2 - Milho</p>
               <p className="text-sm mb-2">Sintomas de deficiência de potássio observados nas bordas das folhas.</p>
               <div className="flex justify-end">
-                <button className="text-sm bg-blue-100 text-blue-700 px-2 py-1 rounded">Ver Detalhes</button>
+                <button 
+                  onClick={handleNotImplemented}
+                  className="text-sm bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200"
+                >
+                  Ver Detalhes
+                </button>
               </div>
             </div>
           </div>
         </div>
         
         <div className="mt-4 flex justify-center space-x-4">
-          <button className="bg-agro-primary text-white px-4 py-2 rounded-md">Registrar Nova Ocorrência</button>
           <button 
-            onClick={openImportModal}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md flex items-center">
-            <Cloud className="mr-2" size={18} />
-            Importar Dados
+            onClick={handleNotImplemented}
+            className="bg-agro-primary text-white px-4 py-2 rounded-md hover:bg-agro-dark transition-colors"
+          >
+            Registrar Nova Ocorrência
           </button>
-          <button className="bg-gray-200 text-agro-dark px-4 py-2 rounded-md">Ver Histórico Completo</button>
+          <div className="flex space-x-2">
+            <button 
+              onClick={openImportModal}
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center"
+            >
+              <Upload className="mr-2" size={18} />
+              Importar via Nuvem
+            </button>
+            <button 
+              onClick={handleNotImplemented}
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center"
+            >
+              <Bluetooth className="mr-2" size={18} />
+              Importar via Bluetooth
+            </button>
+          </div>
+          <button 
+            onClick={handleNotImplemented}
+            className="bg-gray-200 text-agro-dark px-4 py-2 rounded-md hover:bg-gray-300 transition-colors"
+          >
+            Ver Histórico Completo
+          </button>
         </div>
       </div>
     </div>
@@ -872,7 +1094,7 @@ const MonitoringModule = ({ openImportModal }: { openImportModal: () => void }) 
 };
 
 // Assistance Module
-const AssistanceModule = () => {
+const AssistanceModule = ({ handleNotImplemented }: { handleNotImplemented: () => void }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-xl font-semibold text-[#3a7e4f] mb-4">Assistência Técnica e Comunidade</h2>
@@ -906,7 +1128,12 @@ const AssistanceModule = () => {
               
               <div className="p-3 border-t flex">
                 <input type="text" className="flex-grow border rounded-l-md px-3 py-2" placeholder="Digite sua mensagem..." />
-                <button className="bg-agro-primary text-white px-4 py-2 rounded-r-md">Enviar</button>
+                <button 
+                  onClick={handleNotImplemented}
+                  className="bg-agro-primary text-white px-4 py-2 rounded-r-md hover:bg-agro-dark transition-colors"
+                >
+                  Enviar
+                </button>
               </div>
             </div>
           </div>
@@ -921,19 +1148,34 @@ const AssistanceModule = () => {
                 <div className="p-3 bg-blue-50 rounded-md">
                   <h5 className="font-medium">Manejo Integrado de Pragas na Soja</h5>
                   <p className="text-sm text-agro-text-light mt-1">Manual completo sobre identificação e controle de pragas</p>
-                  <button className="text-sm text-blue-600 mt-2">Download PDF</button>
+                  <button 
+                    onClick={handleNotImplemented}
+                    className="text-sm text-blue-600 mt-2 hover:underline"
+                  >
+                    Download PDF
+                  </button>
                 </div>
                 
                 <div className="p-3 bg-green-50 rounded-md">
                   <h5 className="font-medium">Calibração de Pulverizadores</h5>
                   <p className="text-sm text-agro-text-light mt-1">Guia prático para calibragem eficiente de equipamentos</p>
-                  <button className="text-sm text-blue-600 mt-2">Download PDF</button>
+                  <button 
+                    onClick={handleNotImplemented}
+                    className="text-sm text-blue-600 mt-2 hover:underline"
+                  >
+                    Download PDF
+                  </button>
                 </div>
                 
                 <div className="p-3 bg-yellow-50 rounded-md">
                   <h5 className="font-medium">Boas Práticas de Plantio do Milho</h5>
                   <p className="text-sm text-agro-text-light mt-1">Técnicas para maximizar a produtividade do milho</p>
-                  <button className="text-sm text-blue-600 mt-2">Download PDF</button>
+                  <button 
+                    onClick={handleNotImplemented}
+                    className="text-sm text-blue-600 mt-2 hover:underline"
+                  >
+                    Download PDF
+                  </button>
                 </div>
               </div>
             </div>
@@ -945,10 +1187,18 @@ const AssistanceModule = () => {
           <div className="border rounded-md overflow-hidden">
             <div className="p-4 bg-gray-50 border-b flex justify-between items-center">
               <h4 className="font-medium">Tópicos Recentes</h4>
-              <button className="text-sm bg-agro-primary text-white px-3 py-1 rounded-md">Novo Tópico</button>
+              <button 
+                onClick={handleNotImplemented}
+                className="text-sm bg-agro-primary text-white px-3 py-1 rounded-md hover:bg-agro-dark transition-colors"
+              >
+                Novo Tópico
+              </button>
             </div>
             <div className="divide-y">
-              <div className="p-4 hover:bg-gray-50 cursor-pointer">
+              <div 
+                className="p-4 hover:bg-gray-50 cursor-pointer" 
+                onClick={handleNotImplemented}
+              >
                 <div className="flex justify-between mb-1">
                   <h5 className="font-medium">Controle de Lagarta do Cartucho</h5>
                   <span className="text-sm text-agro-text-light">12 respostas</span>
@@ -956,7 +1206,10 @@ const AssistanceModule = () => {
                 <p className="text-sm text-agro-text-light">Iniciado por Carlos Silva, 11/04/2025</p>
               </div>
               
-              <div className="p-4 hover:bg-gray-50 cursor-pointer">
+              <div 
+                className="p-4 hover:bg-gray-50 cursor-pointer"
+                onClick={handleNotImplemented}
+              >
                 <div className="flex justify-between mb-1">
                   <h5 className="font-medium">Qual a melhor variedade de soja para o Centro-Oeste?</h5>
                   <span className="text-sm text-agro-text-light">8 respostas</span>
@@ -964,7 +1217,10 @@ const AssistanceModule = () => {
                 <p className="text-sm text-agro-text-light">Iniciado por Ana Pereira, 09/04/2025</p>
               </div>
               
-              <div className="p-4 hover:bg-gray-50 cursor-pointer">
+              <div 
+                className="p-4 hover:bg-gray-50 cursor-pointer"
+                onClick={handleNotImplemented}
+              >
                 <div className="flex justify-between mb-1">
                   <h5 className="font-medium">Dicas para manejo de solo em áreas de expansão</h5>
                   <span className="text-sm text-agro-text-light">15 respostas</span>
@@ -980,7 +1236,7 @@ const AssistanceModule = () => {
 };
 
 // Settings Module
-const SettingsModule = () => {
+const SettingsModule = ({ handleNotImplemented }: { handleNotImplemented: () => void }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-xl font-semibold text-[#3a7e4f] mb-4">Configurações</h2>
@@ -1016,7 +1272,11 @@ const SettingsModule = () => {
                 <p className="text-sm text-agro-text-light">Ativar modo noturno para uso à noite</p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" value="" className="sr-only peer" />
+                <input 
+                  type="checkbox" 
+                  className="sr-only peer" 
+                  onChange={handleNotImplemented}
+                />
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-agro-primary"></div>
               </label>
             </div>
@@ -1027,7 +1287,12 @@ const SettingsModule = () => {
                 <p className="text-sm text-agro-text-light">Receber alertas importantes no celular</p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" value="" className="sr-only peer" checked />
+                <input 
+                  type="checkbox" 
+                  defaultChecked 
+                  className="sr-only peer" 
+                  onChange={handleNotImplemented}
+                />
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-agro-primary"></div>
               </label>
             </div>
@@ -1037,7 +1302,10 @@ const SettingsModule = () => {
                 <h4 className="font-medium">Unidades de Medida</h4>
                 <p className="text-sm text-agro-text-light">Sistema de unidades utilizadas no aplicativo</p>
               </div>
-              <select className="border rounded-md px-3 py-2">
+              <select 
+                className="border rounded-md px-3 py-2"
+                onChange={handleNotImplemented}
+              >
                 <option>Métrico (ha, mm, kg)</option>
                 <option>Imperial (acre, in, lb)</option>
               </select>
@@ -1057,8 +1325,18 @@ const SettingsModule = () => {
               <input type="password" className="w-full border rounded-md px-3 py-2" defaultValue="********" />
             </div>
             <div className="flex space-x-4 mt-6">
-              <button className="bg-agro-primary text-white px-4 py-2 rounded-md">Salvar Alterações</button>
-              <button className="bg-gray-200 text-agro-dark px-4 py-2 rounded-md">Cancelar</button>
+              <button 
+                onClick={handleNotImplemented}
+                className="bg-agro-primary text-white px-4 py-2 rounded-md hover:bg-agro-dark transition-colors"
+              >
+                Salvar Alterações
+              </button>
+              <button 
+                onClick={handleNotImplemented}
+                className="bg-gray-200 text-agro-dark px-4 py-2 rounded-md hover:bg-gray-300 transition-colors"
+              >
+                Cancelar
+              </button>
             </div>
           </div>
         </div>

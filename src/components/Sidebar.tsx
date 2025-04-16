@@ -49,6 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeModule, setActiveModule }) => {
                     ? 'bg-agro-primary text-white'
                     : 'hover:bg-gray-100'
                 }`}
+                aria-label={`Navegar para ${item.title}`}
               >
                 <span className="mr-3">{item.icon}</span>
                 <span>{item.title}</span>
