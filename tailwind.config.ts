@@ -1,4 +1,3 @@
-
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
@@ -23,6 +22,12 @@ const config: Config = {
         "dashboard-info": "#4299E1",
         "financial-income": "#38A169",
         "financial-expense": "#E53E3E",
+        border: "hsl(var(--border) / <alpha-value>)",
+        background: "hsl(var(--background) / <alpha-value>)",
+        foreground: "hsl(var(--foreground) / <alpha-value>)",
+      },
+      borderColor: {
+        DEFAULT: "hsl(var(--border) / <alpha-value>)"
       }
     },
   },
