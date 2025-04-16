@@ -10,7 +10,9 @@ import {
   ClipboardList, 
   MessageSquare, 
   Settings,
-  ShoppingCart
+  ShoppingCart,
+  Sprout,
+  RotateCcw
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -22,8 +24,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeModule, setActiveModule }) => {
   const menuItems = [
     { id: 'overview', title: 'Visão Geral', icon: <BarChart3 size={20} /> },
     { id: 'financial', title: 'Gestão Financeira', icon: <LineChart size={20} /> },
-    { id: 'planning', title: 'Planejamento', icon: <Calendar size={20} /> },
-    { id: 'weather', title: 'Clima & Solo', icon: <CloudRain size={20} /> },
+    { id: 'planning', title: 'Planejamento de Safras', icon: <Sprout size={20} /> },
+    { id: 'weather', title: 'Registro de Chuvas', icon: <CloudRain size={20} /> },
     { id: 'market', title: 'Comercialização', icon: <ShoppingCart size={20} /> },
     { id: 'machines', title: 'Máquinas', icon: <Tractor size={20} /> },
     { id: 'map', title: 'Talhões no Mapa', icon: <MapPin size={20} /> },
@@ -33,7 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeModule, setActiveModule }) => {
   ];
 
   return (
-    <div className="w-64 bg-white shadow-lg h-full overflow-y-auto">
+    <div className="w-64 bg-white shadow-lg h-screen overflow-y-auto">
       <div className="p-4 border-b border-gray-200">
         <h2 className="text-xl font-bold text-agro-primary">Sistema Agrícola</h2>
         <p className="text-sm text-agro-text-light">Fazenda Esperança</p>
