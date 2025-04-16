@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Camera, CloudUpload, AlertTriangle, MessageSquare, Plus, Edit3, Trash2, Layers, ThermometerSun, BugOff, Plant } from 'lucide-react';
+import { Camera, CloudUpload, AlertTriangle, MessageSquare, Plus, Edit3, Trash2, Layers, ThermometerSun, BugOff, Sprout } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface Plot {
@@ -141,7 +140,7 @@ const PlotMap: React.FC<PlotMapProps> = ({ plot, onAddMonitoring }) => {
           >
             {area.type === 'praga' ? <BugOff size={16} color="white" /> : 
              area.type === 'doenca' ? <AlertTriangle size={16} color="white" /> : 
-             area.type === 'deficiencia' ? <Plant size={16} color="white" /> :
+             area.type === 'deficiencia' ? <Sprout size={16} color="white" /> :
              <AlertTriangle size={16} color="white" />}
           </div>
         ))}
