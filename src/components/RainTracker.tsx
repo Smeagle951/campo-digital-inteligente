@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Calendar, Cloud, CloudRain, Droplets, BarChart, Download, Plus, FileText, ThermometerSun } from 'lucide-react';
 import { toast } from 'sonner';
@@ -24,7 +23,6 @@ interface RainRecord {
   technician: string;
 }
 
-// Sample data for display
 const currentYear = new Date().getFullYear();
 const SAMPLE_RAIN_DATA: RainRecord[] = [
   { id: '1', date: `${currentYear}-04-15`, amount: 12, location: 'Sede', notes: 'Chuva moderada durante a tarde', technician: 'Carlos Silva' },
@@ -39,7 +37,6 @@ const SAMPLE_RAIN_DATA: RainRecord[] = [
   { id: '10', date: `${currentYear}-02-20`, amount: 13, location: 'Talhão 1', notes: 'Chuva moderada', technician: 'João Pereira' },
 ];
 
-// Monthly rain data for charts
 const MONTHLY_RAIN_DATA = [
   { month: 'Jan', amount: 240, average: 220 },
   { month: 'Fev', amount: 180, average: 190 },
@@ -55,7 +52,6 @@ const MONTHLY_RAIN_DATA = [
   { month: 'Dez', amount: 210, average: 200 },
 ];
 
-// Daily rain data for the recent period
 const DAILY_RAIN_DATA = SAMPLE_RAIN_DATA.map(record => ({
   date: new Date(record.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
   amount: record.amount
@@ -216,14 +212,40 @@ const RainTracker: React.FC = () => {
   };
   
   const handleExportData = () => {
-    toast.info("A funcionalidade de exportação será implementada em breve!");
+    const date = new Date().toLocaleDateString('pt-BR');
+    let content = `Relatório de Chuvas - ${date}\n\n`;
+    
+    content += `Total de Chuva: ${totalRainfall.toFixed(1)} mm\n`;
+    content += `Média por Registro: ${averageRainfall.toFixed(1)} mm\n`;
+    content += `Maior Registro: ${maxRainfall.toFixed(1)} mm\n\n`;
+    
+    content += "Registros Detalhados:\n";
+    filteredRecords.forEach(record => {
+      content += `\nData: ${new Date(record.date).toLocaleDateString('pt-BR')}`;
+      content += `\nQuantidade: ${record.amount.toFixed(1)} mm`;
+      content += `\nLocal: ${record.location}`;
+      content += `\nTécnico: ${record.technician}`;
+      if (record.notes) content += `\nObservações: ${record.notes}`;
+      content += "\n";
+    });
+    
+    const blob = new Blob([content], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `relatorio-chuvas-${date.replace(/\//g, '-')}.doc`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    toast.success("Relatório exportado com sucesso!");
   };
   
   const handleGenerateReport = () => {
     toast.info("A funcionalidade de relatórios será implementada em breve!");
   };
   
-  // Filter records based on selected period
   const filterRecordsByPeriod = () => {
     const now = new Date();
     const filterDate = new Date();
@@ -246,12 +268,10 @@ const RainTracker: React.FC = () => {
     return rainRecords.filter(record => new Date(record.date) >= filterDate);
   };
   
-  // Further filter by location if selected
   const filteredRecords = filterRecordsByPeriod().filter(record => 
     locationFilter === 'all' || record.location === locationFilter
   );
   
-  // Calculate statistics
   const totalRainfall = filteredRecords.reduce((sum, record) => sum + record.amount, 0);
   const averageRainfall = filteredRecords.length > 0 
     ? totalRainfall / filteredRecords.length 
@@ -545,7 +565,6 @@ const RainTracker: React.FC = () => {
         </div>
       )}
       
-      {/* New record form modal */}
       {showNewRecordForm && (
         <NewRainRecordForm 
           onClose={() => setShowNewRecordForm(false)}

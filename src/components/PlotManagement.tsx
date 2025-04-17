@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Camera, CloudUpload, AlertTriangle, MessageSquare, Plus, Edit3, Trash2, Layers, ThermometerSun, BugOff, Sprout } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -370,10 +370,37 @@ const NewMonitoringForm: React.FC<NewMonitoringFormProps> = ({ plotId, onClose }
 };
 
 const PlotManagement: React.FC = () => {
+  const [plots, setPlots] = useState<Plot[]>(samplePlots);
   const [selectedPlot, setSelectedPlot] = useState<string | null>(null);
   const [showNewMonitoringForm, setShowNewMonitoringForm] = useState(false);
   const [view, setView] = useState<'list' | 'new'>('list');
   
+  useEffect(() => {
+    // Get plots from EnhancedFarmMap component's data
+    const farmMapPlots = localStorage.getItem('farmPlots');
+    if (farmMapPlots) {
+      try {
+        const parsedPlots = JSON.parse(farmMapPlots);
+        setPlots((currentPlots) => {
+          // Merge existing monitoring data with farm map plots
+          const mergedPlots = parsedPlots.map((farmPlot: any) => {
+            const existingPlot = currentPlots.find(p => p.id === farmPlot.id);
+            return {
+              ...farmPlot,
+              healthIndex: existingPlot?.healthIndex || 85,
+              status: existingPlot?.status || 'preparo',
+              lastUpdated: existingPlot?.lastUpdated || new Date().toISOString().split('T')[0],
+              criticalAreas: existingPlot?.criticalAreas || []
+            };
+          });
+          return mergedPlots;
+        });
+      } catch (error) {
+        console.error('Error parsing farm plots:', error);
+      }
+    }
+  }, []);
+
   const handleAddPlot = () => {
     toast.info("A funcionalidade de adicionar novos talhões será implementada em breve!");
   };
@@ -386,7 +413,7 @@ const PlotManagement: React.FC = () => {
     setShowNewMonitoringForm(false);
   };
   
-  const plot = selectedPlot ? samplePlots.find(p => p.id === selectedPlot) : null;
+  const plot = selectedPlot ? plots.find(p => p.id === selectedPlot) : null;
   const monitoringEntries = selectedPlot ? sampleMonitoringEntries[selectedPlot] || [] : [];
   
   return (
@@ -407,7 +434,7 @@ const PlotManagement: React.FC = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {samplePlots.map(plot => (
+            {plots.map(plot => (
               <div 
                 key={plot.id}
                 className="border rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition-shadow"

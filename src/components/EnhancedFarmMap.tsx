@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { MapPin, Plus, Trash2, Edit3, Crop, ArrowRight, Check, X, Map } from 'lucide-react';
 import { toast } from 'sonner';
@@ -304,7 +303,6 @@ const EnhancedFarmMap: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   
   const handleMapClick = () => {
-    // In a real implementation, this would capture coordinates for drawing a new plot
     toast.info("Clique para adicionar pontos ao talhão. Use o botão de finalizar quando terminar.");
   };
   
@@ -325,7 +323,6 @@ const EnhancedFarmMap: React.FC = () => {
   };
   
   const handleSavePlot = (plotData: Omit<Plot, 'id' | 'coordinates' | 'color'>) => {
-    // In a real implementation, this would finalize after drawing the plot on the map
     const newPlot: Plot = {
       ...plotData,
       id: `temp-${Date.now()}`,
@@ -335,17 +332,19 @@ const EnhancedFarmMap: React.FC = () => {
         { lat: -13.022, lng: -55.987 },
         { lat: -13.022, lng: -55.995 }
       ],
-      color: '#9333EA' // Default color for new plots
+      color: '#9333EA'
     };
     
-    setPlots([...plots, newPlot]);
+    const updatedPlots = [...plots, newPlot];
+    setPlots(updatedPlots);
+    localStorage.setItem('farmPlots', JSON.stringify(updatedPlots));
+    
     handleNotImplemented();
   };
   
   useEffect(() => {
     const loadMap = () => {
       if (mapRef.current) {
-        // In a real implementation, this would initialize the map API
         setTimeout(() => {
           setMapLoaded(true);
         }, 500);
@@ -388,14 +387,12 @@ const EnhancedFarmMap: React.FC = () => {
                 cursor: selectedPlot ? 'default' : 'crosshair'
               }}
             >
-              {/* Plots visualization (simplified) */}
               {plots.map((plot) => (
                 <div 
                   key={plot.id}
                   onClick={() => handlePlotClick(plot)}
                   className="absolute cursor-pointer"
                   style={{
-                    // Position for sample visualization - in a real map this would use coordinates
                     left: `${(plots.indexOf(plot) * 20) + 10}%`,
                     top: `${(plots.indexOf(plot) * 15) + 30}%`,
                   }}
@@ -412,7 +409,6 @@ const EnhancedFarmMap: React.FC = () => {
                 </div>
               ))}
               
-              {/* Map controls */}
               <div className="absolute bottom-4 right-4 flex flex-col space-y-2">
                 <button
                   onClick={handleNotImplemented}
@@ -431,7 +427,6 @@ const EnhancedFarmMap: React.FC = () => {
           )}
         </div>
         
-        {/* Selected plot details */}
         {selectedPlot && (
           <PlotDetailsCard 
             plot={selectedPlot} 
@@ -506,7 +501,6 @@ const EnhancedFarmMap: React.FC = () => {
             <div className="mt-4">
               <h4 className="text-sm font-medium mb-2">Distribuição de Culturas</h4>
               <div className="space-y-2">
-                {/* Simple chart representation */}
                 {Array.from(new Set(plots.map(p => p.crop))).map(crop => {
                   const cropPlots = plots.filter(p => p.crop === crop);
                   const percentage = (cropPlots.reduce((sum, p) => sum + p.area, 0) / 
@@ -533,7 +527,6 @@ const EnhancedFarmMap: React.FC = () => {
         </div>
       </div>
       
-      {/* New plot form modal */}
       {showNewPlotForm && (
         <NewPlotForm 
           onClose={() => setShowNewPlotForm(false)}
@@ -544,7 +537,6 @@ const EnhancedFarmMap: React.FC = () => {
   );
 };
 
-// For the missing 'Minus' icon
 const Minus: React.FC<{ size: number }> = ({ size }) => (
   <svg 
     xmlns="http://www.w3.org/2000/svg" 
