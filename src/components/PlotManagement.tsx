@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, AlertTriangle } from 'lucide-react'; // Add AlertTriangle here
 import { toast } from 'sonner';
 import { Plot } from '../types/plot';
 import { samplePlots, sampleMonitoringEntries } from '../data/samplePlots';
