@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Tractor, PlaneTakeoff, Calendar, Wrench, Plus, Edit3, Trash2, ArrowRight, FileText, Clock, DollarSign, AlertTriangle, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
@@ -822,3 +823,399 @@ const MachineDetails: React.FC<MachineDetailsProps> = ({ machine, maintenanceRec
                 </div>
                 
                 <div>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>Eficiência operacional:</span>
+                    <span>Boa</span>
+                  </div>
+                  <div className="w-full h-2 bg-gray-200 rounded-full">
+                    <div className="h-2 rounded-full bg-green-500" style={{ width: '85%' }}></div>
+                  </div>
+                  <p className="text-xs text-agro-text-light mt-1">85% da média esperada</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {activeTab === 'maintenance' && (
+          <div>
+            <div className="flex justify-between items-center mb-4">
+              <h4 className="font-medium">Histórico de Manutenção</h4>
+              <button
+                onClick={handleNotImplemented}
+                className="flex items-center text-sm text-agro-primary"
+              >
+                <Plus size={16} className="mr-1" />
+                <span>Agendar Nova Manutenção</span>
+              </button>
+            </div>
+            
+            {filteredMaintenanceRecords.length > 0 ? (
+              <div className="space-y-4">
+                {filteredMaintenanceRecords.map(record => (
+                  <div 
+                    key={record.id}
+                    className="border rounded-lg p-4 hover:shadow-sm transition-shadow"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <div className="flex items-center">
+                          <span className={`px-2 py-1 rounded-full text-xs ${
+                            record.type === 'preventive' 
+                              ? 'bg-green-100 text-green-800' 
+                              : record.type === 'corrective'
+                                ? 'bg-orange-100 text-orange-800'
+                                : 'bg-blue-100 text-blue-800'
+                          }`}>
+                            {record.type === 'preventive' 
+                              ? 'Preventiva' 
+                              : record.type === 'corrective'
+                                ? 'Corretiva'
+                                : 'Regular'}
+                          </span>
+                          <span className="ml-2 text-sm text-agro-text-light">{record.date}</span>
+                        </div>
+                        <h5 className="font-medium mt-1">{record.description}</h5>
+                      </div>
+                      <span className="font-medium text-agro-primary">R$ {record.cost.toFixed(2)}</span>
+                    </div>
+                    
+                    {record.technician && (
+                      <div className="mt-2 text-sm">
+                        <span className="text-agro-text-light">Técnico:</span>
+                        <span className="ml-1">{record.technician}</span>
+                      </div>
+                    )}
+                    
+                    {record.parts && record.parts.length > 0 && (
+                      <div className="mt-2">
+                        <h6 className="text-sm text-agro-text-light mb-1">Peças utilizadas:</h6>
+                        <div className="text-sm bg-gray-50 p-2 rounded">
+                          {record.parts.map((part, index) => (
+                            <div key={index} className="flex justify-between">
+                              <span>{part.name} (x{part.quantity})</span>
+                              <span>R$ {(part.unitCost * part.quantity).toFixed(2)}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="mt-3 pt-2 border-t flex justify-between items-center">
+                      <div className="flex items-center">
+                        <span className={`flex items-center text-xs ${
+                          record.completed 
+                            ? 'text-green-600' 
+                            : 'text-yellow-600'
+                        }`}>
+                          {record.completed 
+                            ? <CheckCircle size={14} className="mr-1" />
+                            : <Clock size={14} className="mr-1" />
+                          }
+                          {record.completed ? 'Concluída' : 'Pendente'}
+                        </span>
+                      </div>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={handleNotImplemented}
+                          className="p-1 text-agro-text-light hover:text-agro-primary"
+                        >
+                          <FileText size={16} />
+                        </button>
+                        <button
+                          onClick={handleNotImplemented}
+                          className="p-1 text-agro-text-light hover:text-agro-primary"
+                        >
+                          <Edit3 size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <div className="mx-auto w-16 h-16 flex items-center justify-center rounded-full bg-gray-100 mb-4">
+                  <Wrench size={24} className="text-agro-text-light" />
+                </div>
+                <h5 className="font-medium text-agro-dark">Nenhuma manutenção registrada</h5>
+                <p className="text-sm text-agro-text-light mt-1">
+                  Agende manutenções preventivas para otimizar a vida útil do equipamento.
+                </p>
+                <button
+                  onClick={handleNotImplemented}
+                  className="mt-4 px-4 py-2 border border-agro-primary text-agro-primary rounded-md hover:bg-agro-primary hover:text-white transition-colors"
+                >
+                  Agendar Primeira Manutenção
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const MachineManagement: React.FC = () => {
+  const [machines, setMachines] = useState<Machine[]>(SAMPLE_MACHINES);
+  const [maintenanceRecords, setMaintenanceRecords] = useState<MaintenanceRecord[]>(SAMPLE_MAINTENANCE);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState<Machine['type'] | 'all'>('all');
+  const [filterStatus, setFilterStatus] = useState<Machine['status'] | 'all'>('all');
+  const [isAddMachineOpen, setIsAddMachineOpen] = useState(false);
+  const [isAddMaintenanceOpen, setIsAddMaintenanceOpen] = useState(false);
+  const [selectedMachine, setSelectedMachine] = useState<Machine | null>(null);
+  
+  const handleAddMachine = (machine: Omit<Machine, 'id'>) => {
+    const newMachine: Machine = {
+      ...machine,
+      id: `${machines.length + 1}`,
+    };
+    setMachines([...machines, newMachine]);
+    toast.success("Máquina adicionada com sucesso!");
+  };
+  
+  const handleAddMaintenance = (maintenance: Omit<MaintenanceRecord, 'id'>) => {
+    const newMaintenance: MaintenanceRecord = {
+      ...maintenance,
+      id: `m${maintenanceRecords.length + 1}`,
+    };
+    setMaintenanceRecords([...maintenanceRecords, newMaintenance]);
+    
+    // Update machine's lastMaintenanceDate if the new record is completed
+    if (maintenance.completed) {
+      setMachines(prev => prev.map(machine => {
+        if (machine.id === maintenance.machineId) {
+          return {
+            ...machine,
+            lastMaintenanceDate: maintenance.date
+          };
+        }
+        return machine;
+      }));
+    }
+    
+    toast.success("Manutenção agendada com sucesso!");
+  };
+  
+  const handleOpenMachineDetails = (machine: Machine) => {
+    setSelectedMachine(machine);
+  };
+  
+  const getTypeIcon = (type: Machine['type']) => {
+    switch (type) {
+      case 'tractor':
+        return <Tractor className="text-agro-primary" />;
+      case 'plane':
+        return <PlaneTakeoff className="text-agro-primary" />;
+      case 'implement':
+        return <Wrench className="text-agro-primary" />;
+      default:
+        return <Tractor className="text-agro-primary" />;
+    }
+  };
+  
+  const getStatusColor = (status: Machine['status']) => {
+    switch (status) {
+      case 'operational':
+        return 'bg-green-100 text-green-800';
+      case 'maintenance':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'broken':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+  
+  const getStatusText = (status: Machine['status']) => {
+    switch (status) {
+      case 'operational':
+        return 'Operacional';
+      case 'maintenance':
+        return 'Em Manutenção';
+      case 'broken':
+        return 'Com Problema';
+      default:
+        return status;
+    }
+  };
+  
+  const getMachineTypeText = (type: Machine['type']) => {
+    switch (type) {
+      case 'tractor':
+        return 'Trator';
+      case 'harvester':
+        return 'Colheitadeira';
+      case 'sprayer':
+        return 'Pulverizador';
+      case 'plane':
+        return 'Avião';
+      case 'implement':
+        return 'Implemento';
+      default:
+        return 'Outro';
+    }
+  };
+  
+  const filteredMachines = machines.filter(machine => {
+    const matchesSearch = machine.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          machine.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          machine.model.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesType = filterType === 'all' || machine.type === filterType;
+    const matchesStatus = filterStatus === 'all' || machine.status === filterStatus;
+    
+    return matchesSearch && matchesType && matchesStatus;
+  });
+  
+  return (
+    <div className="p-4 bg-white rounded-lg shadow">
+      <h2 className="text-xl font-semibold text-agro-dark mb-4">Gestão de Máquinas e Equipamentos</h2>
+      
+      <div className="mb-4 flex flex-col sm:flex-row justify-between space-y-2 sm:space-y-0">
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+          <input
+            type="text"
+            placeholder="Buscar máquinas..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="border border-gray-300 rounded-md px-3 py-2 text-sm"
+          />
+          
+          <select
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value as Machine['type'] | 'all')}
+            className="border border-gray-300 rounded-md px-3 py-2 text-sm"
+          >
+            <option value="all">Todos os tipos</option>
+            <option value="tractor">Tratores</option>
+            <option value="harvester">Colheitadeiras</option>
+            <option value="sprayer">Pulverizadores</option>
+            <option value="plane">Aviões</option>
+            <option value="implement">Implementos</option>
+            <option value="other">Outros</option>
+          </select>
+          
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value as Machine['status'] | 'all')}
+            className="border border-gray-300 rounded-md px-3 py-2 text-sm"
+          >
+            <option value="all">Todos os status</option>
+            <option value="operational">Operacional</option>
+            <option value="maintenance">Em Manutenção</option>
+            <option value="broken">Com Problema</option>
+          </select>
+        </div>
+        
+        <div className="flex space-x-2">
+          <button
+            onClick={() => setIsAddMaintenanceOpen(true)}
+            className="px-3 py-2 bg-agro-secondary text-agro-dark text-sm rounded-md hover:opacity-90 inline-flex items-center"
+          >
+            <Calendar size={16} className="mr-1" />
+            Agendar Manutenção
+          </button>
+          
+          <button
+            onClick={() => setIsAddMachineOpen(true)}
+            className="px-3 py-2 bg-agro-primary text-white text-sm rounded-md hover:bg-agro-primary-dark inline-flex items-center"
+          >
+            <Plus size={16} className="mr-1" />
+            Nova Máquina
+          </button>
+        </div>
+      </div>
+      
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="py-2 px-3 text-left text-xs font-medium text-agro-text-light border-b">Tipo</th>
+              <th className="py-2 px-3 text-left text-xs font-medium text-agro-text-light border-b">Código</th>
+              <th className="py-2 px-3 text-left text-xs font-medium text-agro-text-light border-b">Nome</th>
+              <th className="py-2 px-3 text-left text-xs font-medium text-agro-text-light border-b">Modelo</th>
+              <th className="py-2 px-3 text-left text-xs font-medium text-agro-text-light border-b">Horímetro</th>
+              <th className="py-2 px-3 text-left text-xs font-medium text-agro-text-light border-b">Status</th>
+              <th className="py-2 px-3 text-left text-xs font-medium text-agro-text-light border-b">Próx. Manutenção</th>
+              <th className="py-2 px-3 text-left text-xs font-medium text-agro-text-light border-b">Ações</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {filteredMachines.map(machine => (
+              <tr key={machine.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => handleOpenMachineDetails(machine)}>
+                <td className="py-2 px-3">
+                  <div className="flex items-center">
+                    {getTypeIcon(machine.type)}
+                    <span className="ml-1 text-xs">{getMachineTypeText(machine.type)}</span>
+                  </div>
+                </td>
+                <td className="py-2 px-3 text-sm font-medium">{machine.code}</td>
+                <td className="py-2 px-3 text-sm">{machine.name}</td>
+                <td className="py-2 px-3 text-sm">{machine.model}</td>
+                <td className="py-2 px-3 text-sm">{machine.hoursUsed} horas</td>
+                <td className="py-2 px-3">
+                  <span className={`inline-flex text-xs rounded-full px-2 py-1 ${getStatusColor(machine.status)}`}>
+                    {getStatusText(machine.status)}
+                  </span>
+                </td>
+                <td className="py-2 px-3 text-sm">
+                  {machine.nextMaintenance || <span className="text-green-500 text-xs">Em dia</span>}
+                </td>
+                <td className="py-2 px-3">
+                  <div className="flex space-x-1">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOpenMachineDetails(machine);
+                      }}
+                      className="p-1 text-agro-text-light hover:text-agro-primary"
+                    >
+                      <FileText size={16} />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toast.info("Funcionalidade de edição será implementada em breve!");
+                      }}
+                      className="p-1 text-agro-text-light hover:text-agro-primary"
+                    >
+                      <Edit3 size={16} />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      
+      {isAddMachineOpen && (
+        <NewMachineForm
+          onClose={() => setIsAddMachineOpen(false)}
+          onSave={handleAddMachine}
+        />
+      )}
+      
+      {isAddMaintenanceOpen && (
+        <NewMaintenanceForm
+          onClose={() => setIsAddMaintenanceOpen(false)}
+          onSave={handleAddMaintenance}
+          machines={machines}
+        />
+      )}
+      
+      {selectedMachine && (
+        <MachineDetails
+          machine={selectedMachine}
+          maintenanceRecords={maintenanceRecords}
+          onClose={() => setSelectedMachine(null)}
+        />
+      )}
+    </div>
+  );
+};
+
+export default MachineManagement;
